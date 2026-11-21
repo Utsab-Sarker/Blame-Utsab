@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>উৎসবের নামে অভিযোগ দিন</title>
+    <!-- বাংলা ফন্ট (Hind Siliguri) যুক্ত করা হলো -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background: linear-gradient(135deg, #FFF5EB 0%, #FFE4E1 50%, #E0F2FE 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* কার্ড ও বাটনের মজার শ্যাডো */
+        .comic-card {
+            border: 3px solid #1E293B;
+            box-shadow: 8px 8px 0px #1E293B;
+            transition: transform 0.2s ease;
+        }
+
+        .comic-btn {
+            border: 3px solid #1E293B;
+            box-shadow: 4px 4px 0px #1E293B;
+            transition: all 0.15s ease;
+        }
+
+        .comic-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px #1E293B;
+        }
+
+        .comic-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #1E293B;
+        }
+
+        /* আতশ কাঁচ ঘোরার অ্যানিমেশন */
+        @keyframes searchSweep {
+            0%, 100% { transform: translate(-15px, -10px) rotate(-15deg); }
+            50% { transform: translate(15px, 10px) rotate(15deg); }
+        }
+
+        .magnifying-glass {
+            animation: searchSweep 1.2s infinite ease-in-out;
+        }
+
+        /* ক্যারেক্টার অ্যানিমেশনসমূহ */
+        #guardian-arm {
+            transform-origin: 85px 115px;
+            transition: transform 0.1s ease-out;
+        }
+
+        /* হাত তোলার অ্যানিমেশন */
+        .wind-up #guardian-arm {
+            transform: rotate(-110deg);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* সজোরে চড় মারার অ্যানিমেশন */
+        .slap-strike #guardian-arm {
+            transform: rotate(35deg);
+            transition: transform 0.08s cubic-bezier(0.11, 0, 0.5, 0);
+        }
+
+        /* অভিভাবক সামনে ঝুঁকে চড় মারা */
+        #guardian-group {
+            transition: transform 0.15s ease-out;
+        }
+        .slap-strike #guardian-group {
+            transform: translateX(28px);
+        }
+
+        /* উৎসবের চড় খাওয়ার পর ছিটকে যাওয়া ও মাথা ঘোরা */
+        #utsob-group {
+            transform-origin: 270px 190px;
+            transition: transform 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+        }
+
+        .got-slapped #utsob-group {
+            transform: translateX(35px) rotate(22deg);
+        }
+
+        /* স্ক্রিন কাঁপার অ্যানিমেশন */
+        @keyframes screenShake {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            20% { transform: translate(-10px, 6px) rotate(-1.5deg); }
+            40% { transform: translate(10px, -6px) rotate(1.5deg); }
+            60% { transform: translate(-8px, -4px) rotate(-1deg); }
+            80% { transform: translate(8px, 4px) rotate(1deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
+        .shake-stage {
+            animation: screenShake 0.4s ease-in-out;
+        }
+
+        /* ঠাস!! কমিক ইফেক্ট */
+        #thash-effect {
+            transform-origin: 215px 95px;
+            transform: scale(0);
+            opacity: 0;
+        }
+
+        .show-thash #thash-effect {
+            animation: popThash 0.9s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popThash {
+            0% { transform: scale(0) rotate(-15deg); opacity: 0; }
+            20% { transform: scale(1.3) rotate(5deg); opacity: 1; }
+            40% { transform: scale(1) rotate(-3deg); opacity: 1; }
+            80% { transform: scale(1.05) rotate(0deg); opacity: 1; }
+            100% { transform: scale(0.9) rotate(0deg); opacity: 0; }
+        }
+
+        /* মাথা ঘোরার তারা অ্যানিমেশন */
+        @keyframes spinStars {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .dizzy-stars {
+            opacity: 0;
+            transform-origin: 270px 45px;
+            transition: opacity 0.3s ease;
+        }
+
+        .show-stars .dizzy-stars {
+            opacity: 1;
+            animation: spinStars 2s linear infinite;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center p-4 sm:p-6">
+
+    <!-- মূল কন্টেইনার -->
+    <main class="w-full max-w-xl bg-white rounded-3xl p-6 sm:p-8 comic-card relative">
+        
+        <!-- হেডার ব্যাজ -->
+        <div class="flex justify-center mb-3">
+            <span class="bg-red-100 text-red-700 border-2 border-red-600 px-3 py-1 rounded-full text-xs sm:text-sm font-bold tracking-wide uppercase">
+                🚨 জরুরি বিচার বিভাগীয় পোর্টাল
+            </span>
+        </div>
+
+        <!-- শিরোনাম -->
+        <h1 class="text-2xl sm:text-4xl font-bold text-center text-slate-900 mb-2">
+            উৎসবের নামে অভিযোগ দিন
+        </h1>
+        <p class="text-center text-slate-600 text-sm sm:text-base mb-6">
+            উৎসবের যেকোনো দুষ্টুমি বা অপরাধের তথ্য নিচে নির্ভয়ে জমা দিন!
+        </p>
+
+        <!-- ১. অভিযোগ ফর্ম সেকশন -->
+        <form id="complaintForm" class="space-y-5">
+            <!-- অভিযোগের বর্ণনা -->
+            <div>
+                <label for="complaintDesc" class="block text-base sm:text-lg font-bold text-slate-800 mb-2">
+                    অভিযোগের বর্ণনা <span class="text-red-500">*</span>
+                </label>
+                <textarea 
+                    id="complaintDesc" 
+                    rows="4" 
+                    required
+                    placeholder="উৎসব কী করেছে বিস্তারিত লিখুন... (যেমন: না বলে চকলেট খেয়েছে, পড়াশোনা ফাঁকি দিয়েছে ইত্যাদি)"
+                    class="w-full rounded-2xl border-2 border-slate-800 p-3.5 text-slate-800 bg-amber-50/40 focus:bg-white focus:outline-none focus:ring-4 focus:ring-amber-300 transition text-base"
+                ></textarea>
+                <p id="errorMsg" class="hidden text-red-600 text-sm font-semibold mt-1">
+                    ⚠️ দয়া করে আগে উৎসবের নামে অভিযোগের বর্ণনা লিখুন!
+                </p>
+            </div>
+
+            <!-- প্রমাণ যুক্ত করুন (অপশনাল) -->
+            <div>
+                <label class="block text-base sm:text-lg font-bold text-slate-800 mb-2">
+                    প্রমাণ যুক্ত করুন <span class="text-slate-500 font-normal text-sm">(অপশনাল)</span>
+                </label>
+                <label for="evidenceFile" class="flex flex-col items-center justify-center w-full p-4 border-2 border-dashed border-slate-700 rounded-2xl cursor-pointer bg-slate-50 hover:bg-blue-50 transition">
+                    <div class="flex items-center space-x-2 text-slate-700">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
+                        </svg>
+                        <span class="font-semibold text-sm sm:text-base">যেকোনো ফাইল, ছবি বা প্রমাণ সিলেক্ট করুন</span>
+                    </div>
+                    <span id="fileNameDisplay" class="mt-2 text-xs sm:text-sm text-emerald-700 font-semibold hidden bg-emerald-100 px-3 py-1 rounded-full border border-emerald-400"></span>
+                    <input id="evidenceFile" type="file" class="hidden" />
+                </label>
+            </div>
+
+            <!-- সাবমিট বাটন -->
+            <button 
+                type="submit" 
+                class="w-full py-3.5 px-6 bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-lg sm:text-xl rounded-2xl comic-btn flex items-center justify-center gap-2 cursor-pointer"
+            >
+                <span>সাবমিট করুন</span>
+                <span>⚖️</span>
+            </button>
+        </form>
+
+        <!-- ২. তদন্ত চলছে সেকশন (শুরুতে লুকানো থাকবে) -->
+        <div id="investigatingSection" class="hidden py-10 text-center space-y-4">
+            <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-blue-100 border-4 border-slate-800 mb-2">
+                <span class="text-5xl magnifying-glass inline-block">🔍</span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-bold text-blue-700 animate-pulse">
+                তদন্ত হচ্ছে...
+            </h2>
+            <p class="text-slate-600 text-sm sm:text-base">
+                গোয়েন্দা বিভাগ উৎসবের বিরুদ্ধে আনীত অভিযোগ যাচাই-বাছাই করছে...
+            </p>
+            <!-- প্রোগ্রেস বার -->
+            <div class="w-full max-w-xs mx-auto bg-slate-200 rounded-full h-3.5 border-2 border-slate-800 overflow-hidden">
+                <div id="progressBar" class="bg-blue-500 h-full w-0 transition-all duration-300"></div>
+            </div>
+        </div>
+
+        <!-- ৩. তদন্ত সফল এবং শাস্তি প্রদানের সেকশন (শুরুতে লুকানো থাকবে) -->
+        <div id="punishmentSection" class="hidden space-y-5 text-center">
+            <!-- তদন্ত সফল ব্যানার -->
+            <div class="bg-emerald-100 border-2 border-emerald-700 text-emerald-900 px-4 py-3 rounded-2xl shadow-sm">
+                <p class="text-xl sm:text-2xl font-bold flex items-center justify-center gap-2">
+                    <span>✅</span>
+                    <span>তদন্ত সফল হয়েছে!</span>
+                </p>
+                <p class="text-xs sm:text-sm text-emerald-800 mt-0.5">
+                    অভিযোগের সত্যতা শতভাগ প্রমাণিত হয়েছে!
+                </p>
+            </div>
+
+            <!-- শাস্তির শিরোনাম -->
+            <div class="bg-red-600 text-white py-2 px-4 rounded-xl border-2 border-slate-900 inline-block shadow">
+                <h2 class="text-xl sm:text-2xl font-bold tracking-wide">
+                    ⚡ উৎসবকে শাস্তি দেওয়া হচ্ছে ⚡
+                </h2>
+            </div>
+
+            <!-- কার্টুন অ্যানিমেশন স্টেজ -->
+            <div id="stageContainer" class="relative w-full bg-gradient-to-b from-sky-100 to-amber-100 rounded-2xl border-3 border-slate-900 overflow-hidden p-2 shadow-inner">
+                <svg id="cartoonStage" viewBox="0 0 380 230" class="w-full h-auto max-h-72 select-none">
+                    <!-- মাটি / ফ্লোর -->
+                    <rect x="0" y="195" width="380" height="35" fill="#D97706" opacity="0.25"/>
+                    <line x1="15" y1="195" x2="365" y2="195" stroke="#1E293B" stroke-width="3" stroke-linecap="round"/>
+
+                    <!-- ================= অভিভাবক ক্যারেক্টার (বাম পাশে) ================= -->
+                    <g id="guardian-group">
+                        <!-- মাথার ওপর নাম: অভিভাবক -->
+                        <rect x="42" y="12" width="86" height="24" rx="12" fill="#1E293B"/>
+                        <text x="85" y="29" text-anchor="middle" fill="#FFFFFF" font-size="14" font-weight="bold">অভিভাবক</text>
+                        <polygon points="80,36 90,36 85,42" fill="#1E293B"/>
+
+                        <!-- পা -->
+                        <line x1="75" y1="155" x2="70" y2="195" stroke="#1E293B" stroke-width="5" stroke-linecap="round"/>
+                        <line x1="95" y1="155" x2="100" y2="195" stroke="#1E293B" stroke-width="5" stroke-linecap="round"/>
+                        <!-- জুতা -->
+                        <ellipse cx="73" cy="195" rx="9" ry="4" fill="#1E293B"/>
+                        <ellipse cx="103" cy="195" rx="9" ry="4" fill="#1E293B"/>
+
+                        <!-- শরীর (পাঞ্জাবি/শার্ট) -->
+                        <rect x="65" y="98" width="40" height="60" rx="14" fill="#2563EB" stroke="#1E293B" stroke-width="3"/>
+                        <!-- বাম হাত (কোমরে রাখা) -->
+                        <path d="M 65 110 Q 50 125 65 140" fill="none" stroke="#1E293B" stroke-width="4.5" stroke-linecap="round"/>
+
+                        <!-- মাথা -->
+                        <circle cx="85" cy="72" r="24" fill="#FDBA74" stroke="#1E293B" stroke-width="3"/>
+                        <!-- চুল -->
+                        <path d="M 61 68 C 61 45, 109 45, 109 68 C 102 58, 68 58, 61 68 Z" fill="#1E293B"/>
+                        <!-- রাগী ভ্রু -->
+                        <line x1="87" y1="62" x2="99" y2="67" stroke="#1E293B" stroke-width="3" stroke-linecap="round"/>
+                        <!-- চোখ -->
+                        <circle cx="94" cy="71" r="2.8" fill="#1E293B"/>
+                        <!-- গোঁফ ও রাগী মুখ -->
+                        <path d="M 86 81 Q 94 77 101 81" fill="none" stroke="#1E293B" stroke-width="2.5" stroke-linecap="round"/>
+                        <path d="M 88 86 Q 94 82 100 86" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round"/>
+
+                        <!-- ডান হাত (যে হাত দিয়ে চড় মারবে) -->
+                        <g id="guardian-arm">
+                            <line x1="85" y1="115" x2="145" y2="115" stroke="#FDBA74" stroke-width="8" stroke-linecap="round"/>
+                            <line x1="85" y1="115" x2="145" y2="115" stroke="#1E293B" stroke-width="3" stroke-linecap="round"/>
+                            <!-- হাতের তালু -->
+                            <circle cx="150" cy="115" r="8" fill="#FDBA74" stroke="#1E293B" stroke-width="2.5"/>
+                        </g>
+                    </g>
+
+                    <!-- ================= উৎসব ক্যারেক্টার (ডান পাশে) ================= -->
+                    <g id="utsob-group">
+                        <!-- মাথার ওপর নাম: উৎসব -->
+                        <rect x="235" y="16" width="70" height="24" rx="12" fill="#DC2626"/>
+                        <text x="270" y="33" text-anchor="middle" fill="#FFFFFF" font-size="14" font-weight="bold">উৎসব</text>
+                        <polygon points="265,40 275,40 270,46" fill="#DC2626"/>
+
+                        <!-- মাথা ঘোরার তারা (চড় খাওয়ার পর দেখাবে) -->
+                        <g class="dizzy-stars">
+                            <text x="242" y="52" font-size="14">⭐</text>
+                            <text x="285" y="50" font-size="14">💫</text>
+                            <text x="264" y="42" font-size="12">✨</text>
+                        </g>
+
+                        <!-- পা -->
+                        <line x1="262" y1="158" x2="257" y2="195" stroke="#1E293B" stroke-width="5" stroke-linecap="round"/>
+                        <line x1="278" y1="158" x2="283" y2="195" stroke="#1E293B" stroke-width="5" stroke-linecap="round"/>
+                        <!-- জুতা -->
+                        <ellipse cx="254" cy="195" rx="8" ry="4" fill="#1E293B"/>
+                        <ellipse cx="280" cy="195" rx="8" ry="4" fill="#1E293B"/>
+
+                        <!-- শরীর (টি-শার্ট) -->
+                        <rect x="252" y="103" width="36" height="56" rx="12" fill="#10B981" stroke="#1E293B" stroke-width="3"/>
+                        <!-- হাত -->
+                        <path d="M 270 115 L 252 138" stroke="#1E293B" stroke-width="4.5" stroke-linecap="round"/>
+
+                        <!-- মাথা -->
+                        <circle cx="270" cy="78" r="22" fill="#FED7AA" stroke="#1E293B" stroke-width="3"/>
+                        <!-- এলোমেলো চুল -->
+                        <path d="M 248 73 C 250 50, 290 50, 292 73 C 282 62, 260 62, 248 73 Z" fill="#1E293B"/>
+                        
+                        <!-- সাধারণ মুখ (চড় খাওয়ার আগে) -->
+                        <g id="utsob-normal-face">
+                            <circle cx="261" cy="76" r="2.5" fill="#1E293B"/>
+                            <path d="M 258 86 Q 264 83 268 87" fill="none" stroke="#1E293B" stroke-width="2" stroke-linecap="round"/>
+                        </g>
+
+                        <!-- চড় খাওয়ার পরের মুখ ও লাল গাল -->
+                        <g id="utsob-slapped-face" class="hidden">
+                            <!-- ঘুরপাক খাওয়া চোখ -->
+                            <text x="254" y="80" font-size="12" font-weight="bold" fill="#1E293B">😵</text>
+                            <!-- গালে লাল ছাপ -->
+                            <circle cx="266" cy="84" r="7" fill="#EF4444" opacity="0.65"/>
+                            <!-- চড়ের আঙুলের দাগ -->
+                            <line x1="262" y1="81" x2="269" y2="83" stroke="#991B1B" stroke-width="1.5"/>
+                            <line x1="262" y1="84" x2="269" y2="86" stroke="#991B1B" stroke-width="1.5"/>
+                            <line x1="263" y1="87" x2="269" y2="89" stroke="#991B1B" stroke-width="1.5"/>
+                        </g>
+                    </g>
+
+                    <!-- ================= চড় মারার "ঠাস!!" কমিক ইফেক্ট ================= -->
+                    <g id="thash-effect">
+                        <polygon 
+                            points="215,50 227,72 252,65 238,88 260,102 235,112 245,135 220,122 205,142 198,118 172,125 188,102 168,85 194,80 190,55 210,72" 
+                            fill="#FACC15" 
+                            stroke="#DC2626" 
+                            stroke-width="3"
+                        />
+                        <text x="214" y="102" text-anchor="middle" fill="#DC2626" font-size="22" font-weight="900" transform="rotate(-8 214 102)">
+                            ঠাস!!
+                        </text>
+                    </g>
+                </svg>
+            </div>
+
+            <!-- স্ট্যাটাস মেসেজ -->
+            <p id="punishmentCaption" class="text-slate-700 font-semibold text-base sm:text-lg">
+                অভিভাবক আসছেন শাস্তি দিতে...
+            </p>
+
+            <!-- অ্যাকশন বাটনসমূহ -->
+            <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                <button 
+                    id="replaySlapBtn" 
+                    type="button"
+                    class="flex-1 py-3 px-4 bg-red-500 hover:bg-red-400 text-white font-bold text-base rounded-2xl comic-btn cursor-pointer"
+                >
+                    👋 আবার ঠাস করে চড় মারুন
+                </button>
+                <button 
+                    id="resetFormBtn" 
+                    type="button"
+                    class="flex-1 py-3 px-4 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-base rounded-2xl comic-btn cursor-pointer"
+                >
+                    📝 নতুন অভিযোগ দিন
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // DOM এলিমেন্টগুলো সিলেক্ট করা হলো
+        const complaintForm = document.getElementById('complaintForm');
+        const complaintDesc = document.getElementById('complaintDesc');
+        const errorMsg = document.getElementById('errorMsg');
+        const evidenceFile = document.getElementById('evidenceFile');
+        const fileNameDisplay = document.getElementById('fileNameDisplay');
+
+        const investigatingSection = document.getElementById('investigatingSection');
+        const progressBar = document.getElementById('progressBar');
+        const punishmentSection = document.getElementById('punishmentSection');
+
+        const stageContainer = document.getElementById('stageContainer');
+        const cartoonStage = document.getElementById('cartoonStage');
+        const utsobNormalFace = document.getElementById('utsob-normal-face');
+        const utsobSlappedFace = document.getElementById('utsob-slapped-face');
+        const punishmentCaption = document.getElementById('punishmentCaption');
+
+        const replaySlapBtn = document.getElementById('replaySlapBtn');
+        const resetFormBtn = document.getElementById('resetFormBtn');
+
+        // ওয়েব অডিও এপিআই ব্যবহার করে বাস্তবসম্মত জোরালো "ঠাস!" (Slap) শব্দ তৈরি
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playSlapSound() {
+            try {
+                initAudio();
+                const now = audioCtx.currentTime;
+
+                // ১. চড়ের তীক্ষ্ণ থাপ্পড়ের শব্দ (White Noise Burst + Bandpass Filter)
+                const bufferSize = audioCtx.sampleRate * 0.25;
+                const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const output = noiseBuffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    output[i] = Math.random() * 2 - 1;
+                }
+
+                const whiteNoise = audioCtx.createBufferSource();
+                whiteNoise.buffer = noiseBuffer;
+
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.setValueAtTime(1100, now);
+                filter.Q.setValueAtTime(1.2, now);
+
+                const noiseGain = audioCtx.createGain();
+                noiseGain.gain.setValueAtTime(1.8, now);
+                noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 0.18);
+
+                whiteNoise.connect(filter);
+                filter.connect(noiseGain);
+                noiseGain.connect(audioCtx.destination);
+                whiteNoise.start(now);
+
+                // ২. চড়ের ভারী ধাক্কার শব্দ (Low Punch Oscillator)
+                const osc = audioCtx.createOscillator();
+                const oscGain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(220, now);
+                osc.frequency.exponentialRampToValueAtTime(45, now + 0.14);
+
+                oscGain.gain.setValueAtTime(1.2, now);
+                oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+
+                osc.connect(oscGain);
+                oscGain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.16);
+            } catch (e) {
+                console.warn('Audio playback skipped:', e);
+            }
+        }
+
+        // ফাইল সিলেক্ট করলে ফাইলের নাম দেখানো
+        evidenceFile.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files.length > 0) {
+                const fileName = e.target.files[0].name;
+                fileNameDisplay.textContent = `📎 সংযুক্ত প্রমাণ: ${fileName}`;
+                fileNameDisplay.classList.remove('hidden');
+            } else {
+                fileNameDisplay.classList.add('hidden');
+            }
+        });
+
+        // চড় মারার অ্যানিমেশন চালানোর ফাংশন
+        function triggerSlapSequence() {
+            // আগের সব অ্যানিমেশন ক্লাস রিসেট করা
+            cartoonStage.classList.remove('wind-up', 'slap-strike', 'got-slapped', 'show-thash', 'show-stars');
+            stageContainer.classList.remove('shake-stage');
+            utsobNormalFace.classList.remove('hidden');
+            utsobSlappedFace.classList.add('hidden');
+            punishmentCaption.textContent = 'অভিভাবক হাত তুলছেন... 😠';
+
+            // ১. হাত পেছনে নেওয়া (Wind-up)
+            setTimeout(() => {
+                cartoonStage.classList.add('wind-up');
+            }, 250);
+
+            // ২. সজোরে ঠাস করে চড় মারা!
+            setTimeout(() => {
+                cartoonStage.classList.remove('wind-up');
+                cartoonStage.classList.add('slap-strike', 'got-slapped', 'show-thash', 'show-stars');
+                stageContainer.classList.add('shake-stage');
+
+                // উৎসবের চেহারা পরিবর্তন
+                utsobNormalFace.classList.add('hidden');
+                utsobSlappedFace.classList.remove('hidden');
+
+                // ঠাস শব্দ বাজানো
+                playSlapSound();
+
+                punishmentCaption.innerHTML = '<span class="text-red-600 font-bold text-xl">ঠাস!!</span> উৎসব উচিত শিক্ষা পেয়েছে! 😵💫';
+            }, 800);
+
+            // ৩. অভিভাবকের হাত স্বাভাবিক অবস্থানে ফিরে আসা (উৎসবের মাথা ঘুরতেই থাকবে)
+            setTimeout(() => {
+                cartoonStage.classList.remove('slap-strike');
+            }, 1350);
+        }
+
+        // ফর্ম সাবমিট ইভেন্ট
+        complaintForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const descText = complaintDesc.value.trim();
+            if (!descText) {
+                errorMsg.classList.remove('hidden');
+                complaintDesc.focus();
+                return;
+            }
+            errorMsg.classList.add('hidden');
+
+            // ইউজারের ক্লিকের সাথে অডিও আনলক করা
+            initAudio();
+
+            // ফর্ম লুকিয়ে "তদন্ত হচ্ছে" দেখানো
+            complaintForm.classList.add('hidden');
+            investigatingSection.classList.remove('hidden');
+
+            // প্রোগ্রেস বার অ্যানিমেশন
+            progressBar.style.width = '15%';
+            setTimeout(() => { progressBar.style.width = '55%'; }, 600);
+            setTimeout(() => { progressBar.style.width = '90%'; }, 1400);
+            setTimeout(() => { progressBar.style.width = '100%'; }, 2000);
+
+            // ২.৩ সেকেন্ড পর "তদন্ত সফল হয়েছে" ও শাস্তির দৃশ্য দেখানো
+            setTimeout(() => {
+                investigatingSection.classList.add('hidden');
+                punishmentSection.classList.remove('hidden');
+                triggerSlapSequence();
+            }, 2300);
+        });
+
+        // আবার চড় মারার বাটন
+        replaySlapBtn.addEventListener('click', () => {
+            triggerSlapSequence();
+        });
+
+        // নতুন অভিযোগ দেওয়ার বাটন (রিসেট)
+        resetFormBtn.addEventListener('click', () => {
+            complaintForm.reset();
+            fileNameDisplay.classList.add('hidden');
+            progressBar.style.width = '0%';
+            punishmentSection.classList.add('hidden');
+            complaintForm.classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
